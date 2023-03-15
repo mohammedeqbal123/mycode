@@ -1,0 +1,41 @@
+/* Alta3 Research - rzfeeser@alta3.com
+   Working with "for_each" within a null_resource */
+
+/* Terraform block */
+terraform {
+  required_providers {
+    null = {
+      source = "hashicorp/null"
+      version = "3.1.1"
+    }
+  }
+}
+
+/* provider block */
+provider "null" {
+  # Configuration options
+}
+
+/* a list of local variables */
+
+locals {  
+  rgs = {
+          "alpha" = "eastus"
+          "bravo" = "southindia"
+          "charlie" = "westus2"
+       }
+}
+
+
+/* The null_resource implements the standard resource lifecycle but takes no more action */
+resource "null_resource" "rgs" {
+  for_each = local.rgs
+  triggers = {
+    name = each.key
+    status = each.value
+}
+}
+output"rgs" {
+  value = null_resource.rgs
+}
+
